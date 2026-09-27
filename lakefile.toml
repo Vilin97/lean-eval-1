@@ -36,7 +36,7 @@ rev = "e92c9f15fdfacc8536f31cfb3b7ad26c3c8cd204"
 name = "lean-eval-generator"
 # Upstream: leanprover/lean-eval-generator#9; use its pinned fork until merged.
 git = "https://github.com/Vilin97/lean-eval-generator.git"
-rev = "bd54907811ed256e67e0f67f785d8d1a2b8981df"
+rev = "0c9c5ce33933c5d19e817abfd918f552e6db60fe"
 
 [[lean_lib]]
 name = "LeanEval"
