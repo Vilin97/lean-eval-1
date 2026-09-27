@@ -74,26 +74,6 @@ def main : IO UInt32 := do
   let passes ← IO.mkRef 0
   let fails ← IO.mkRef 0
 
-  check "problem coverage rejects solution-only imports, including through helpers" passes fails do
-    for imported in #["LeanPool.Basic", "LeanPool", "«LeanPool».Basic", "Challenge.Foo", "Solution.Foo"] do
-      let result ← withFakeRepo #[
-        ("LeanEval/Claimed.lean", "import LeanEval.Helper\n"),
-        ("LeanEval/Helper.lean", s!"import {imported}\n")
-      ] fun root => do
-        match ← (checkProblemModuleCoverage root #[problem "p" "LeanEval.Claimed"]).toBaseIO with
-        | .ok _ => pure (some s!"accepted forbidden import {imported}")
-        | .error err => pure <| assertContains "error explains policy" (toString err) "solution-only"
-      if result.isSome then return result
-    return none
-
-  check "problem coverage ignores commented imports and similarly named modules" passes fails do
-    withFakeRepo #[
-      ("LeanEval/Claimed.lean",
-        "/- import LeanPool.Basic -/\nimport LeanPoolish.Basic\nimport Mathlib\n")
-    ] fun root => do
-      checkProblemModuleCoverage root #[problem "p" "LeanEval.Claimed"]
-      pure none
-
   -- Regression for https://github.com/leanprover/lean-eval/issues/519: a module
   -- no manifest reaches is never compiled, so a broken statement leaves CI green.
   check "unreachableModules reports a module no root reaches" passes fails do

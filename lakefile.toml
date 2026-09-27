@@ -4,8 +4,8 @@ defaultTargets = ["LeanEval"]
 [leanOptions]
 autoImplicit = false
 
-# Available to generated solutions only. Problem-source validation rejects
-# imports from lean-pool; keep this before Mathlib so Mathlib owns shared pins.
+# Available to generated solutions only. Generation rejects statement imports
+# from lean-pool; keep this before Mathlib so Mathlib owns shared pins.
 [[require]]
 name = "lean-pool"
 git = "https://github.com/Vilin97/lean-pool.git"
@@ -34,8 +34,9 @@ rev = "e92c9f15fdfacc8536f31cfb3b7ad26c3c8cd204"
 
 [[require]]
 name = "lean-eval-generator"
-git = "https://github.com/leanprover/lean-eval-generator.git"
-rev = "2de74049bd91d2c592e7009df8f5e5968599a272"
+# Upstream: leanprover/lean-eval-generator#9; use its pinned fork until merged.
+git = "https://github.com/Vilin97/lean-eval-generator.git"
+rev = "bade61dfb1cdbeb3d5fcde0fa4dac5fca29e38c1"
 
 [[lean_lib]]
 name = "LeanEval"

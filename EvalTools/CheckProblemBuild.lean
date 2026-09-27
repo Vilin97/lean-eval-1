@@ -1,5 +1,4 @@
 import EvalTools.Manifest
-import EvalTools.SolutionDependencies
 
 namespace EvalTools
 
@@ -27,7 +26,6 @@ def runCheckProblemBuild (root : System.FilePath)
     let modules ← selectManifestModules entries requestedModules
     let mut disallowed := []
     for moduleName in modules do
-      checkProblemSolutionImports root moduleName
       let output ← runCmdCheckedCaptured "lake" #["build", moduleName] root
         s!"Problem module '{moduleName}' build failed"
       let combined :=

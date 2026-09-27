@@ -89,7 +89,7 @@ def scoreProblems (root : System.FilePath) (problems : Array EvalProblemMetadata
     for hole in entry.holes do
       let e ← extractOne root entry hole
       extracteds := extracteds.push e
-    let expectedFiles ← renderSolutionWorkspace root entry extracteds toolchain deps workspaceTest
+    let expectedFiles ← renderWorkspace root entry extracteds toolchain deps workspaceTest
     let workspace ← workspacePathForProblem root entry.id workspacesRoot
     let relDisplay :=
       let wsStr := workspace.toString
