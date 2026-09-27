@@ -206,6 +206,18 @@ Trusted files you should not edit in the normal solver workflow are:
 `Challenge.lean` contains the benchmark statement. `Solution.lean` is the fixed bridge
 that tells comparator to check your theorem from the `Submission` namespace.
 
+Solutions may import individual `LeanPool.*` modules from
+[Lean Pool](https://github.com/Vilin97/lean-pool) in `Submission.lean` or helpers
+under `Submission/`. Generated workspaces include a pinned `lean-pool` dependency;
+you do not need to edit `lakefile.toml`. Only modules you import are built.
+The usual comparator and nanoda checks still apply to the resulting proof.
+
+Lean Pool is **solution-only**: problem statements under `LeanEval/` and their
+local helpers may not import it. Both manifest validation and workspace generation
+reject these imports, including indirect imports through local helpers. The root
+dependency exists to share the pinned package cache with solver workspaces, not to
+extend the benchmark's statement vocabulary.
+
 ### 5. Run comparator locally
 
 ```bash

@@ -215,6 +215,7 @@ time, the upstream publisher controls our supply chain.
 | Lean toolchain | leanprover/lean4 | `v4.34.0` | compiler and Lake | 2026-09-16 |
 | mathlib | leanprover-community/mathlib4 | `db1c5741da0acf96c97584de6ccf0e3bfbc0ae99` | theorem library (the pin of TauCeti `23bfe9b`) | 2026-09-26 |
 | TauCeti | TauCetiProject/TauCeti | `23bfe9bc742f8713b58ce40b155f994848ae8a5e` | definitions used by `classification_finite_simple_groups`; oleans from its public Lake cache | 2026-09-26 |
+| lean-pool | Vilin97/lean-pool | `20fb00c51334c79a2b75ed548dea093774ad62b0` | solution-only library; forbidden in trusted problem imports | 2026-09-27 |
 | lean4-cli | leanprover/lean4-cli | `e92c9f15fdfacc8536f31cfb3b7ad26c3c8cd204` | command-line parsing | 2026-09-16 |
 | landrun | zouuup/landrun | `5ed4a3db3a4ad930d577215c6b9abaa19df7f99f` | Linux landlock sandbox | 2026-05-04 |
 | lean4export | leanprover/lean4export | `076e8e57707e813375e8f9da8bf989799ace9680` | exports olean to text | 2026-09-16 |

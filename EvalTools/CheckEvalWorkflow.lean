@@ -85,7 +85,7 @@ def runCheckEvalWorkflow (root : System.FilePath) : IO UInt32 := do
     -- catalog-wide generation check. CI validates and builds the full catalog
     -- independently; repeating that work here used to dominate the workflow.
     try
-      generate root (selectedProblemId := some TWO_PLUS_TWO_ID) (check := true)
+      generateSolutionWorkspaces root (selectedProblemId := some TWO_PLUS_TWO_ID) (check := true)
     catch e =>
       throw <| IO.userError <|
         "The generated two_plus_two smoke-test workspace is stale.\n" ++
@@ -112,6 +112,14 @@ def runCheckEvalWorkflow (root : System.FilePath) : IO UInt32 := do
         (replaceFirst pristineSubmission "  sorry\n" "  norm_num\n").get!
       let correctSummary ← summarizeAtRoot root problems workspacesRoot
       assertCounts correctSummary 1 1 "Correct two_plus_two attempt"
+      -- Exercise the solution-only package through the real scoring path. Its
+      -- Basic module has no Mathlib imports, keeping this smoke test small.
+      IO.FS.writeFile (workspace / "Submission.lean")
+        ("import LeanPool.Basic\n" ++
+          (replaceFirst pristineSubmission "  sorry\n"
+            "  cases (show hello = \"world\" from rfl)\n  norm_num\n").get!)
+      let poolSummary ← summarizeAtRoot root problems workspacesRoot
+      assertCounts poolSummary 1 1 "Correct attempt importing Lean Pool"
       IO.println "Eval workflow check passed."
       IO.FS.removeDirAll tempDir
       return (0 : UInt32)

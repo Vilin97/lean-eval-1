@@ -71,6 +71,47 @@ def main : IO UInt32 := do
   let passes ← IO.mkRef 0
   let fails ← IO.mkRef 0
 
+  check "solution dependencies preserve statement dependencies and put Mathlib last" passes fails do
+    let deps : RootDependencies := {
+      mathlib := { name := "mathlib", git := "mathlib-url", rev := "mathlib-pin" }
+      extras := #[
+        { name := "TauCeti", git := some "tau-url", rev := some "tau-pin" },
+        { name := "lean-pool", git := some "pool-url", rev := some "pool-pin" },
+        { name := "Cli" }]
+    }
+    let specs ← IO.ofExcept (solutionWorkspaceRequires deps #["TauCeti.Foo", "Mathlib"])
+    pure <| assertEq "dependency order" (specs.map (·.name)) #["lean-pool", "TauCeti", "mathlib"]
+      |>.or (assertEq "pool pin" specs[0]!.rev "pool-pin")
+
+  check "solution dependencies reject a missing or unpinned pool" passes fails do
+    let deps : RootDependencies := {
+      mathlib := { name := "mathlib", git := "mathlib-url", rev := "mathlib-pin" }
+    }
+    pure <| assertEq "missing pin rejected"
+      (solutionWorkspaceRequires deps #[]).isOk false
+      |>.or (assertEq "empty pin rejected"
+        (solutionWorkspaceRequires { deps with extras := #[{ name := "lean-pool" }] } #[]).isOk false)
+
+  check "solution policy changes only the lakefile and solver documentation" passes fails do
+    let root ← IO.currentDir
+    let deps ← loadRootDependencies root
+    let entry : EvalProblemMetadata := {
+      id := "two_plus_two", title := "test", group := "test", status := "draft",
+      visible := true, statementRevision := 1, tags := #[],
+      moduleName := "LeanEval.EasyProblems", holes := #["two_plus_two"], submitter := "tester"
+    }
+    let files := #[
+      ("Challenge.lean", "trusted statement"), ("ChallengeDeps.lean", "trusted helpers"),
+      ("Solution.lean", "trusted bridge"), ("config.json", "trusted config"),
+      ("Submission.lean", "solver proof"), ("lakefile.toml", "old lakefile"),
+      ("README.md", "instructions\n")]
+    let updated ← withSolutionDependencies root entry deps files
+    let trusted := files.filter fun (path, _) => path != "lakefile.toml" && path != "README.md"
+    let lakefile := (updated.find? (·.1 == "lakefile.toml")).get!.2
+    pure <| assertEq "trusted files unchanged" (updated.extract 0 5) trusted
+      |>.or (assertContains "pool available" lakefile "name = \"lean-pool\"")
+      |>.or (assertContains "helper library retained" lakefile "name = \"ChallengeDeps\"")
+
   check "validateGeneratedCatalog accepts a coherent generated tree" passes fails do
     withGeneratedCatalog fun root => do
       validateGeneratedCatalog root

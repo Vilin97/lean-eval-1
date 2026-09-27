@@ -64,7 +64,7 @@ def runGenerateCmd (p : Parsed) : IO UInt32 := do
   let problem? : Option String := p.flag? "problem" |>.map fun f => f.as! String
   let check := p.hasFlag "check"
   try
-    LeanEvalGenerator.Core.generate root problem? check
+    generateSolutionWorkspaces root problem? check
     return 0
   catch e =>
     IO.eprintln (toString e)

@@ -1,5 +1,6 @@
 import Lean
 import EvalTools.Markers
+import EvalTools.SolutionDependencies
 
 open Lean
 
@@ -107,6 +108,8 @@ so it costs no build time and runs before the inventory cross-check. -/
 def checkProblemModuleCoverage
     (root : System.FilePath) (entries : Array EvalProblemMetadata) : IO Unit := do
   let sources ← loadProblemSourceModules root
+  for source in sources do
+    checkProblemSolutionImports root source.name.toString
   let known := sources.foldl (fun s source => s.insert source.name) (∅ : Std.HashSet Name)
   let missing := entries.filterMap fun entry =>
     if known.contains (parseModuleName entry.moduleName) then none
