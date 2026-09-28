@@ -112,6 +112,17 @@ def runCheckEvalWorkflow (root : System.FilePath) : IO UInt32 := do
         (replaceFirst pristineSubmission "  sorry\n" "  norm_num\n").get!
       let correctSummary ← summarizeAtRoot root problems workspacesRoot
       assertCounts correctSummary 1 1 "Correct two_plus_two attempt"
+      -- Exercise the solution-only package through the real scoring path. Its
+      -- Basic module has no Mathlib imports, keeping this smoke test small.
+      -- Shared package caches are read-only inside comparator's sandbox.
+      let _ ← runCmdCheckedCaptured "lake" #["build", "LeanPool.Basic"] root
+        "Failed to prepare the Lean Pool smoke-test dependency"
+      IO.FS.writeFile (workspace / "Submission.lean")
+        ("import LeanPool.Basic\n" ++
+          (replaceFirst pristineSubmission "  sorry\n"
+            "  cases (show hello = \"world\" from rfl)\n  norm_num\n").get!)
+      let poolSummary ← summarizeAtRoot root problems workspacesRoot
+      assertCounts poolSummary 1 1 "Correct attempt importing Lean Pool"
       IO.println "Eval workflow check passed."
       IO.FS.removeDirAll tempDir
       return (0 : UInt32)
