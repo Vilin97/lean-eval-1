@@ -118,11 +118,9 @@ def runCheckEvalWorkflow (root : System.FilePath) : IO UInt32 := do
       let _ ← runCmdCheckedCaptured "lake" #["build", "LeanPool.Basic"] root
         "Failed to prepare the Lean Pool smoke-test dependency"
       IO.FS.writeFile (workspace / "Submission.lean")
-        ("module\npublic import LeanPool.Basic\n" ++
-          ((replaceFirst pristineSubmission "  sorry\n"
-            "  cases (show hello = \"world\" from rfl)\n  norm_num\n").get!
-            |>.replace "import " "public import "
-            |>.replace "theorem " "public theorem "))
+        ("import LeanPool.Basic\n" ++
+          (replaceFirst pristineSubmission "  sorry\n"
+            "  cases (show hello = \"world\" from rfl)\n  norm_num\n").get!)
       let poolSummary ← summarizeAtRoot root problems workspacesRoot
       assertCounts poolSummary 1 1 "Correct attempt importing Lean Pool"
       IO.println "Eval workflow check passed."

@@ -212,11 +212,12 @@ time, the upstream publisher controls our supply chain.
 
 | Dependency | Repo | Pinned to | Purpose | Last bumped |
 |---|---|---|---|---|
-| Lean toolchain | leanprover/lean4 | `v4.34.0` | compiler and Lake | 2026-09-16 |
-| mathlib | leanprover-community/mathlib4 | `db1c5741da0acf96c97584de6ccf0e3bfbc0ae99` | theorem library (the pin of TauCeti `23bfe9b`) | 2026-09-26 |
-| TauCeti | TauCetiProject/TauCeti | `23bfe9bc742f8713b58ce40b155f994848ae8a5e` | definitions used by `classification_finite_simple_groups`; oleans from its public Lake cache | 2026-09-26 |
-| lean-pool | Vilin97/lean-pool | `20fb00c51334c79a2b75ed548dea093774ad62b0` | solution-only library; forbidden in trusted problem imports | 2026-09-27 |
-| lean4-cli | leanprover/lean4-cli | `e92c9f15fdfacc8536f31cfb3b7ad26c3c8cd204` | command-line parsing | 2026-09-16 |
+| Lean toolchain | leanprover/lean4 | `v4.35.0-rc3` | compiler and Lake | 2026-09-28 |
+| mathlib | leanprover-community/mathlib4 | `5e0c4e5239cb0a2d86d68a884bf52cfd963fce22` | theorem library (the pin of TauCeti `522706e`) | 2026-09-28 |
+| TauCeti | TauCetiProject/TauCeti | `522706e83ca349c3d6bde045e56778d17354ae8d` | definitions used by `classification_finite_simple_groups`; oleans from its public Lake cache | 2026-09-28 |
+| lean-pool | Vilin97/lean-pool | `e9d53e9cbcff8dfd0cc816ba94db7a26b082929f` | solution-only library; forbidden in trusted problem imports | 2026-09-28 |
+| lean-eval-generator | leanprover/lean-eval-generator | `0b8cc2d141710a18515c53448f006c971dd8eeb4` | workspace generation and solution-dependency policy | 2026-09-28 |
+| lean4-cli | leanprover/lean4-cli | `843844fa601dd56767b1eb22b7ada5b64d5e567a` | command-line parsing | 2026-09-28 |
 | landrun | zouuup/landrun | `5ed4a3db3a4ad930d577215c6b9abaa19df7f99f` | Linux landlock sandbox | 2026-05-04 |
 | lean4export | leanprover/lean4export | `076e8e57707e813375e8f9da8bf989799ace9680` | exports olean to text | 2026-09-16 |
 | comparator | leanprover/comparator | `d03acab154d269c06e60e4de7e4cc85deebff94b` | the verifier | 2026-09-16 |

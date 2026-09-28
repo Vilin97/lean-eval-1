@@ -212,10 +212,6 @@ all generated workspaces via `solution-dependencies.json`. Problem statements an
 their local helpers may not import it; workspace generation rejects these imports.
 Comparator and nanoda checks apply as usual.
 
-Lean Pool uses Lean's module system. Start a submission file importing it with
-`module`, use `public import` for dependencies needed in exported theorem statements,
-and mark the submitted theorem `public theorem` so the `Solution.lean` bridge can use it.
-
 ### 5. Run comparator locally
 
 ```bash
